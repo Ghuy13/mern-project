@@ -28,7 +28,7 @@ const CardComponent = () => {
                 <WrapperStyleTextSell>| Đã bán 1000+</WrapperStyleTextSell>
             </WrapperReporText>
             <WrapperPriceText>
-                16.990.000₫
+                <span style={{ marginRight: '8px' }}>16.990.000₫</span>
                 <WrapperDiscountText>-5%</WrapperDiscountText>
             </WrapperPriceText>
         </WrapperCardStyle>
