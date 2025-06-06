@@ -47,7 +47,6 @@ const HomePage = () => {
                             }}
                             styleTextButton={{ fontWeight: "500" }}
                         />
-
                     </div>
                 </div >
             </div>
