@@ -1,19 +1,19 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const routes = require('./routes');
+const bodyParser = require('body-parser');
 dotenv.config();
 
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-})
+app.use(bodyParser.json())
 
-console.log('Connecting to MongoDB...', process.env.MONGO_DB);
+routes(app);
 
-mongoose.connect(`mongodb+srv://admin:${process.env.MONGO_DB}@cluster0.0bxl8dn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)
+mongoose.connect(`${process.env.MONGO_DB}`)
     .then(() => {
         console.log('Connected to MongoDB');
     })
