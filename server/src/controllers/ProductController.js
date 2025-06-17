@@ -2,7 +2,6 @@ const ProductService = require('../services/ProductService')
 
 const createProduct = async (req, res) => {
     try {
-        console.log(req.body)
         const { name, image, type, price, countInStock, rating, description } = req.body
 
         if (!name || !image || !type || !price || !countInStock || !rating) {
@@ -77,7 +76,8 @@ const deleteProduct = async (req, res) => {
 
 const getAllProduct = async (req, res) => {
     try {
-        const response = await ProductService.getAllProduct()
+        const { limit, page } = req.query
+        const response = await ProductService.getAllProduct(Number(limit), Number(page))
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
