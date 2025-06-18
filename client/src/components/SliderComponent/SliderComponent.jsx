@@ -16,7 +16,7 @@ const SliderComponent = ({ arrImage }) => {
         <WrapperSliderStyle  {...settings}>
             {arrImage.map((image) => {
                 return (
-                    <Image src={image} alt="banner" preview={false} width="100%" height="274px" />
+                    <Image key={image} src={image} alt="banner" preview={false} width="100%" height="274px" />
                 )
             })}
         </WrapperSliderStyle>
