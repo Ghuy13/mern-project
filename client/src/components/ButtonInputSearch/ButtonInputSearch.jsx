@@ -1,4 +1,3 @@
-import { Button, } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import InputCompnent from "../InputCompnent/InputCompnent";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
@@ -14,7 +13,7 @@ const ButtonInputSearch = (props) => {
             <InputCompnent
                 size={size}
                 placeholder={placeholder}
-                bordered={false}
+                variant="borderless"
                 style={{ backgroundColor: backgroundColorInput }}
             />
             <ButtonComponent

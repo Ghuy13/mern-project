@@ -6,8 +6,13 @@ import {
     UserOutlined
 } from '@ant-design/icons';
 import ButtonInputSearch from '../ButtonInputSearch/ButtonInputSearch';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderComponent = () => {
+    const navigate = useNavigate() // Lấy hàm 'navigate' từ React Router để chuyển hướng trang
+    const handleNavigateLogin = () => {
+        navigate('/sign-in')  // Gọi hàm 'navigate' để chuyển hướng người dùng đến đường dẫn '/sign-in'
+    }
     return (
         // new comment
         <div style={{ wirth: '100%', display: 'flex', justifyContent: 'center', background: 'rgb(162, 42, 41)' }}>
@@ -18,7 +23,7 @@ const HeaderComponent = () => {
                 <Col span={13}>
                     <ButtonInputSearch
                         size="large"
-                        bordered={false}
+                        // bordered={false}
                         textButton="Tìm kiếm"
                         placeholder="Bạn tìm gì hôm nay?"
                     />
@@ -28,13 +33,13 @@ const HeaderComponent = () => {
                         <WrapperTextHeaderSmall>
                             <UserOutlined style={{ fontSize: '28px' }} />
                         </WrapperTextHeaderSmall>
-                        <WrapperTextHeaderSmall>
-                            <span>Đăng nhập/Đăng ký </span>
+                        <div onClick={handleNavigateLogin} style={{ cursor: 'pointer' }}>
+                            <WrapperTextHeaderSmall>Đăng nhập/Đăng ký </WrapperTextHeaderSmall>
                             <div>
-                                <span>Tài khoản </span>
+                                <WrapperTextHeaderSmall>Tài khoản</WrapperTextHeaderSmall>
                                 <CaretDownOutlined />
                             </div>
-                        </WrapperTextHeaderSmall>
+                        </div>
                     </WrapprerHeaderAccount>
                     <div>
                         <Badge count={5} size='small'>

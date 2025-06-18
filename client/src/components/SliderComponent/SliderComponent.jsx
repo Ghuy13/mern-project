@@ -1,4 +1,3 @@
-import Slider from "react-slick";
 import { Image } from 'antd';
 import { WrapperSliderStyle } from "./style";
 
