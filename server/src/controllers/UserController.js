@@ -3,22 +3,22 @@ const UserService = require('../services/UserService')
 const createUser = async (req, res) => {
     try {
         console.log(req.body)
-        const { name, email, password, confirmPassword, phone } = req.body
+        const { email, password, confirmPassword, } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ //xác thực email
         const isCheckEmail = reg.test(email)
-        if (!name || !email || !password || !confirmPassword || !phone) {
+        if (!email || !password || !confirmPassword) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The input is required'
             })
         } else if (!isCheckEmail) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The input is email'
             })
         } else if (password !== confirmPassword) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The Password is equal ConfirmPassword'
             })
         }
@@ -35,27 +35,21 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        console.log(req.body)
-        const { name, email, password, confirmPassword, phone } = req.body
+        console.log(req.body)  //-----------------------------
+        const { email, password } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ //xác thực email
         const isCheckEmail = reg.test(email)
-        if (!name || !email || !password || !confirmPassword || !phone) {
+        if (!email || !password) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The input is required'
             })
         } else if (!isCheckEmail) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The input is email'
             })
-        } else if (password !== confirmPassword) {
-            return res.status(200).json({
-                status: 'Error',
-                message: 'The Password is equal ConfirmPassword'
-            })
         }
-
         const response = await UserService.loginUser(req.body)
         return res.status(200).json(response)
     } catch (e) {
@@ -72,7 +66,7 @@ const updateUser = async (req, res) => {
         const data = req.body
         if (!userId) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The userID is required'
             })
         }
@@ -91,7 +85,7 @@ const deleteUser = async (req, res) => {
         // const token = req.headers
         if (!userId) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The userID is required'
             })
         }
@@ -121,7 +115,7 @@ const getDetailsUser = async (req, res) => {
         // const token = req.headers
         if (!userId) {
             return res.status(200).json({
-                status: 'Error',
+                status: 'ERR',
                 message: 'The userID is required'
             })
         }
