@@ -3,23 +3,48 @@ import InputForm from "../../components/InputForm/InputForm";
 import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from "./style";
 import imageLogo from '../../assets/images/logo_login.png';
 import { Image } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import * as UserService from '../../services/UserService';
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/LoadingComponent";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from 'react-redux';
+import { updateUser } from "../../redux/slides/userSlice";
 
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const mutation = useMutationHooks(
         data => UserService.loginUser(data)
     );
-    const { data, isPending } = mutation;
+    const { data, isPending, isSuccess, } = mutation;
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/'); // Navigate to home page on success
+            console.log('Login successful:', data);
+            localStorage.setItem('access_token', data?.access_token); // Store user data in localStorage
+            if (data?.access_token) {
+                const decoded = jwtDecode(data?.access_token);
+                console.log('Decoded:', decoded);
+                if (decoded?.id) {
+                    handleGetDetailsUser(decoded?.id, data?.access_token);
+                }
+            }
+        }
+    }, [isSuccess])
+
+    const handleGetDetailsUser = async (id, token) => {
+        const res = await UserService.getDetaisUser(id, token);
+        dispatch(updateUser({ ...res?.data, access_token: token }));
+
+    }
 
     const handleNavigateSignUp = () => {
         navigate('/sign-up');

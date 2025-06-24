@@ -7,9 +7,12 @@ import {
 } from '@ant-design/icons';
 import ButtonInputSearch from '../ButtonInputSearch/ButtonInputSearch';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const HeaderComponent = () => {
     const navigate = useNavigate() // Lấy hàm 'navigate' từ React Router để chuyển hướng trang
+    const user = useSelector((state) => state.user)
+    console.log('user', user)
     const handleNavigateLogin = () => {
         navigate('/sign-in')  // Gọi hàm 'navigate' để chuyển hướng người dùng đến đường dẫn '/sign-in'
     }
@@ -23,7 +26,6 @@ const HeaderComponent = () => {
                 <Col span={13}>
                     <ButtonInputSearch
                         size="large"
-                        // bordered={false}
                         textButton="Tìm kiếm"
                         placeholder="Bạn tìm gì hôm nay?"
                     />
@@ -33,13 +35,17 @@ const HeaderComponent = () => {
                         <WrapperTextHeaderSmall>
                             <UserOutlined style={{ fontSize: '28px' }} />
                         </WrapperTextHeaderSmall>
-                        <div onClick={handleNavigateLogin} style={{ cursor: 'pointer' }}>
-                            <WrapperTextHeaderSmall>Đăng nhập/Đăng ký </WrapperTextHeaderSmall>
-                            <div>
-                                <WrapperTextHeaderSmall>Tài khoản</WrapperTextHeaderSmall>
-                                <CaretDownOutlined />
+                        {user?.name ? (
+                            <div style={{ cursor: 'pointer' }}>{user.name}</div>
+                        ) : (
+                            <div onClick={handleNavigateLogin} style={{ cursor: 'pointer' }}>
+                                <WrapperTextHeaderSmall>Đăng nhập/Đăng ký</WrapperTextHeaderSmall>
+                                <div>
+                                    <WrapperTextHeaderSmall>Tài khoản</WrapperTextHeaderSmall>
+                                    <CaretDownOutlined />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </WrapprerHeaderAccount>
                     <div>
                         <Badge count={5} size='small'>
@@ -49,7 +55,7 @@ const HeaderComponent = () => {
                     </div>
                 </Col>
             </WrapperHeader>
-        </div>
+        </div >
     );
 }
 export default HeaderComponent;
