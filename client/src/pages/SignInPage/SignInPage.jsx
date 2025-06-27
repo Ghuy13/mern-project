@@ -28,8 +28,7 @@ const SignInPage = () => {
     useEffect(() => {
         if (isSuccess) {
             navigate('/'); // Navigate to home page on success
-            console.log('Login successful:', data);
-            localStorage.setItem('access_token', data?.access_token); // Store user data in localStorage
+            localStorage.setItem('access_token', JSON.stringify(data?.access_token)); // Store user data in localStorage
             if (data?.access_token) {
                 const decoded = jwtDecode(data?.access_token);
                 console.log('Decoded:', decoded);
@@ -41,9 +40,8 @@ const SignInPage = () => {
     }, [isSuccess])
 
     const handleGetDetailsUser = async (id, token) => {
-        const res = await UserService.getDetaisUser(id, token);
+        const res = await UserService.getDetailsUser(id, token);
         dispatch(updateUser({ ...res?.data, access_token: token }));
-
     }
 
     const handleNavigateSignUp = () => {

@@ -33,3 +33,10 @@ export const WrapperTextHeaderSmall = styled.span`
   white-space: nowrap;
   }
 `;
+
+export const WrapperContentPopup = styled.p`
+  cursor: pointer;
+  &:hover {
+    background: #b9b9b9;
+    color: #fff;
+`;

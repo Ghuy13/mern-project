@@ -5,22 +5,55 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { routes } from './routes'
 import DefaultComponent from './components/DefaultComponent/DefaultComponent'
 import { Fragment } from 'react/jsx-runtime'
-// import { useEffect } from 'react'
+import { use, useEffect } from 'react'
+import { isJsonString } from './untils'
+import { jwtDecode } from "jwt-decode";
+import * as UserService from '../src/services/UserService';
+import { useDispatch } from 'react-redux'
+import { updateUser } from './redux/slides/userSlice'
 // import axios from 'axios'
-// import { useQuery } from '@tanstack/react-query'
+
 
 
 function App() {
-  // useEffect(() => {
-  //   fetchApi()
-  // }, [])
-  // console.log("process.env.REACT_API_URL_BACKEND", process.env.REACT_APP_API_URL_BACKEND)
-  // const fetchApi = async () => {
-  //   const res = await axios.get(`${process.env.REACT_APP_API_URL_BACKEND}/product/get-all`)
-  //   return res.data
-  // }
-  // const query = useQuery({ queryKey: ['todos'], queryFn: fetchApi })
-  // console.log(" ~ App ~ query:", query)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const { storageData, decoded } = handleDecoded()
+    if (decoded?.id) {
+      handleGetDetailsUser(decoded?.id, storageData);
+    }
+  }, [])
+
+  const handleDecoded = () => {
+    let storageData = localStorage.getItem('access_token')
+    let decoded = {}
+    if (storageData && isJsonString(storageData)) {
+      storageData = JSON.parse(storageData)
+      decoded = jwtDecode(storageData);
+    }
+    return { decoded, storageData };
+  }
+
+  UserService.axiosJWT.interceptors.request.use(async function (config) {
+    const currentTime = new Date()
+    const { decoded } = handleDecoded()
+
+    if (decoded?.exp < currentTime.getTime() / 1000) {
+      const data = await UserService.refreshToken();
+      config.headers['token'] = `Bearer ${data?.access_token}`;
+    }
+
+    return config;
+  }, function (error) {
+    return Promise.reject(error);
+  });
+
+
+  const handleGetDetailsUser = async (id, token) => {
+    const res = await UserService.getDetailsUser(id, token);
+    dispatch(updateUser({ ...res?.data, access_token: token }));
+  }
+
   return (
     <div>
       <Router>
