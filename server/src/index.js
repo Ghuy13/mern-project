@@ -14,6 +14,8 @@ const port = process.env.PORT || 3001;
 
 app.use(express.json()); // Parse JSON bodies
 app.use(cors())
+app.use(express.json({ limit: '50mb' })); // Increase the limit for JSON bodies
+app.use(express.urlencoded({ limit: '50mb' })); // Increase the limit for URL-encoded bodies
 app.use(bodyParser.json())
 app.use(cookieParser())
 
