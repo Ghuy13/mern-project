@@ -5,19 +5,24 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { routes } from './routes'
 import DefaultComponent from './components/DefaultComponent/DefaultComponent'
 import { Fragment } from 'react/jsx-runtime'
-import { use, useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 import { isJsonString } from './untils'
 import { jwtDecode } from "jwt-decode";
 import * as UserService from '../src/services/UserService';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from './redux/slides/userSlice'
+import Loading from './components/LoadingComponent/LoadingComponent'
 // import axios from 'axios'
 
 
 
 function App() {
   const dispatch = useDispatch()
+  const [isPending, setIsPending] = useState(false)
+  const user = useSelector((state) => state.user)
+
   useEffect(() => {
+    setIsPending(true)
     const { storageData, decoded } = handleDecoded()
     if (decoded?.id) {
       handleGetDetailsUser(decoded?.id, storageData);
@@ -52,25 +57,30 @@ function App() {
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
     dispatch(updateUser({ ...res?.data, access_token: token }));
+    setIsPending(false)
   }
 
   return (
     <div>
-      <Router>
-        <Routes>
-          {routes.map((route) => {
-            const Page = route.page
-            const Layout = route.isShowHeader ? DefaultComponent : Fragment
-            return (
-              <Route key={route.path} path={route.path} element={
-                <Layout>
-                  <Page />
-                </Layout>
-              } />
-            )
-          })}
-        </Routes>
-      </Router>
+      <Loading isPending={isPending}>
+        <Router>
+          <Routes>
+            {routes.map((route) => {
+              const Page = route.page
+              const ischeckAuth = !route.isPrivate || user.isAdmin
+              const Layout = route.isShowHeader ? DefaultComponent : Fragment
+              if (!ischeckAuth) return null;// Không render nếu không đủ quyền
+              return (
+                <Route key={route.path} path={ischeckAuth && route.path} element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                } />
+              )
+            })}
+          </Routes>
+        </Router>
+      </Loading>
     </div>
 
   )

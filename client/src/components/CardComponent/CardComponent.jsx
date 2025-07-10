@@ -3,7 +3,9 @@ import { StyleNameProduct, WrapperCardStyle, WrapperDiscountText, WrapperPriceTe
 import logo from "../../assets/images/logo.png";
 
 
-const CardComponent = () => {
+const CardComponent = (props) => {
+    const { countInStock, description, image, name, price, rating, type, selled, discount } = props;
+
     return (
         <WrapperCardStyle
             hoverable
@@ -20,16 +22,18 @@ const CardComponent = () => {
                 left: "-1px",
                 borderTopLeftRadius: "3px",
             }}></img>
-            <StyleNameProduct>Iphone</StyleNameProduct>
+            <StyleNameProduct>{name}</StyleNameProduct>
             <WrapperReporText>
                 <span style={{ marginRight: "4px" }}>
-                    <span> 4.9</span> <StarFilled style={{ fontSize: "12px", color: "yellow" }} />
+                    <span>{rating}</span> <StarFilled style={{ fontSize: "12px", color: "yellow" }} />
                 </span>
-                <WrapperStyleTextSell>| Đã bán 1000+</WrapperStyleTextSell>
+                <WrapperStyleTextSell>| Đã bán {selled || 1000}+</WrapperStyleTextSell>
             </WrapperReporText>
             <WrapperPriceText>
-                <span style={{ marginRight: '8px' }}>16.990.000₫</span>
-                <WrapperDiscountText>-5%</WrapperDiscountText>
+                <span style={{ marginRight: '8px' }}>{price}</span>
+                <WrapperDiscountText>
+                    {discount || 5}%
+                </WrapperDiscountText>
             </WrapperPriceText>
         </WrapperCardStyle>
     );
