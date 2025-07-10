@@ -25,7 +25,7 @@ export const userSlice = createSlice({
             state.avatar = avatar;
             state.id = _id;
             state.access_token = access_token;
-            state.isAdmin = true;
+            state.isAdmin = isAdmin;
         },
         resetUser: (state) => {
             state.name = '';

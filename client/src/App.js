@@ -27,6 +27,7 @@ function App() {
     if (decoded?.id) {
       handleGetDetailsUser(decoded?.id, storageData);
     }
+    setIsPending(false)
   }, [])
 
   const handleDecoded = () => {
@@ -57,7 +58,7 @@ function App() {
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
     dispatch(updateUser({ ...res?.data, access_token: token }));
-    setIsPending(false)
+
   }
 
   return (
