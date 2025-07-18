@@ -1,50 +1,39 @@
 import { Table } from "antd"
+import Loading from "../LoadingComponent/LoadingComponent";
 
 
 const TableComponent = (props) => {
-    const { selectionType = 'checkbox' } = props
+    const { selectionType = 'checkbox', data = [], isPending = false, columns = [] } = props
 
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            render: text => <a>{text}</a>,
-        },
-        {
-            title: 'Age',
-            dataIndex: 'age',
-        },
-        {
-            title: 'Address',
-            dataIndex: 'address',
-        },
-    ];
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sydney No. 1 Lake Park',
-        },
-        {
-            key: '4',
-            name: 'Disabled User',
-            age: 99,
-            address: 'Sydney No. 1 Lake Park',
-        },
-    ];
+    // const columns = [
+    //     {
+    //         title: 'Name',
+    //         dataIndex: 'name',
+    //         render: text => <a>{text}</a>,
+    //     },
+    //     {
+    //         title: 'Price',
+    //         dataIndex: 'price',
+    //     },
+    //     {
+    //         title: 'Rating',
+    //         dataIndex: 'rating',
+    //     },
+    //     {
+    //         title: 'Type',
+    //         dataIndex: 'type',
+    //     },
+    //     {
+    //         title: 'Action',
+    //         dataIndex: 'action',
+    //         render: text => <a>{text}</a>,
+    //     },
+    // ];
+    // const data = products?.length && products?.map((product) => {
+    //     return { ...product, key: product._id }
+    // })
+    // console.log("data", data)
+
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -54,13 +43,15 @@ const TableComponent = (props) => {
             name: record.name,
         }),
     };
-
+    console.log('data', data)
     return (
-        <Table
-            rowSelection={Object.assign({ type: selectionType }, rowSelection)}
-            columns={columns}
-            dataSource={data}
-        />
+        <Loading isPending={isPending}>
+            <Table
+                rowSelection={Object.assign({ type: selectionType }, rowSelection)}
+                columns={columns}
+                dataSource={data}
+            />
+        </Loading>
     )
 }
 export default TableComponent
