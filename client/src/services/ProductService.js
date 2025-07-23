@@ -16,15 +16,6 @@ export const getDetailsProduct = async (id) => {
     return res.data;
 }
 
-// export const updateProduct = async (id, access_token, data) => {
-//     const res = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/product/update/${id}`, data, {
-//         headers: {
-//             token: `Bearer ${access_token}`
-//         }
-//     });
-//     return res.data;
-// }
-
 export const updateProduct = async (id, access_token, data) => {
     const res = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/product/update/${id}`, data, {
         headers: {
@@ -32,5 +23,13 @@ export const updateProduct = async (id, access_token, data) => {
         }
     });
     return res.data;
+}
 
+export const deleteProduct = async (id, access_token) => {
+    const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/product/delete/${id}`, {
+        headers: {
+            Authorization: `Bearer ${access_token}`
+        }
+    });
+    return res.data;
 }
