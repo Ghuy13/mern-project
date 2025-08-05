@@ -439,6 +439,7 @@ const AdminProduct = () => {
             </div>
 
             <ModalComponent
+                forceRender
                 title="Tạo sản phẩm"
                 open={isModalOpen}
                 onCancel={handleCancel}
@@ -503,7 +504,7 @@ const AdminProduct = () => {
                     </Form>
                 </Loading>
             </ModalComponent>
-            <DrawerComponent title='Chi tiết sản phẩm' isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width='40%'>
+            <DrawerComponent forceRender title='Chi tiết sản phẩm' isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width='40%'>
                 <Loading isPending={isPendingUpdate || isPendingUpdated} delay={0}>
                     <Form
                         name="basic"
@@ -570,6 +571,7 @@ const AdminProduct = () => {
             </DrawerComponent>
 
             <ModalComponent
+                forceRender
                 title="Xóa sản phẩm"
                 open={isModalOpenDelete}
                 onCancel={handleCancelDelete}
@@ -579,9 +581,7 @@ const AdminProduct = () => {
                     <div>Bạn có muốn xóa sản phẩm này không ?</div>
                 </Loading>
             </ModalComponent>
-
         </div>
     )
 }
-
 export default AdminProduct
