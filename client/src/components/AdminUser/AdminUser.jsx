@@ -50,12 +50,25 @@ const AdminUser = () => {
         return UserService.deleteUser(id, token);
     });
 
+    const mutationDeletedMany = useMutationHooks((data) => {
+        const { token, ...ids } = data;
+        return UserService.deleteManyUser(ids, token);
+    });
+
+    const handleDeleteManyUsers = (ids) => {
+        console.log('IDs to delete:', ids);
+        mutationDeletedMany.mutate({ ids: ids, token: user?.access_token }, {
+            onSettled: () => {
+                queryUser.refetch()
+            }
+        })
+    }
+
     const getAllUsers = async () => {
         if (!user?.access_token) {
             throw new Error('Vui lòng đăng nhập để lấy danh sách người dùng');
         }
         const res = await UserService.getAllUser(user?.access_token);
-        console.log('res', res);
         return res;
     };
 
@@ -82,16 +95,17 @@ const AdminUser = () => {
         if (rowSelected) {
             fetchGetDetailsUser(rowSelected)
         }
-    }, [rowSelected])
+    }, [rowSelected, isOpenDrawer])
 
 
     const handleDetailsProduct = () => {
         setIsOpenDrawer(true)
     }
 
-
     const { data: dataUpdated, isPending: isPendingUpdated, isSuccess: isSuccessUpdated, isError: isErrorUpdated } = mutationUpdate
     const { data: dataDeleted, isPending: isPendingDeleted, isSuccess: isSuccessDeleted, isError: isErrorDeleted } = mutationDeleted
+    const { data: dataDeletedMany, isPending: isPendingDeletedMany, isSuccess: isSuccessDeletedMany, isError: isErrorDeletedMany } = mutationDeletedMany
+
     const queryUser = useQuery({
         queryKey: ['users'],
         queryFn: getAllUsers
@@ -227,6 +241,15 @@ const AdminUser = () => {
         }
     }, [isSuccessDeleted, dataDeleted, isErrorDeleted])
 
+    useEffect(() => {
+        if (isSuccessDeletedMany && dataDeletedMany?.status === 'OK') {
+            message.success()
+        } else if (isErrorDeletedMany) {
+            console.log('Error deleting many users:', dataDeletedMany);
+            message.error()
+        }
+    }, [isSuccessDeletedMany, dataDeletedMany, isErrorDeletedMany])
+
 
     const handleCancelDelete = () => {
         setIsModalOpenDelete(false)
@@ -298,7 +321,7 @@ const AdminUser = () => {
         <div>
             <WrapperHeader>Quản lý người dùng</WrapperHeader>
             <div style={{ marginTop: '20px' }}>
-                <TableComponent columns={columns} isPending={isPendingUsers} data={dataTable} onRow={(record, rowIndex) => {
+                <TableComponent handleDeleteMany={handleDeleteManyUsers} columns={columns} isPending={isPendingUsers} data={dataTable} onRow={(record, rowIndex) => {
                     return {
                         onClick: (event) => {
                             setRowSelected(record._id)
@@ -317,40 +340,17 @@ const AdminUser = () => {
                         autoComplete="on"
                         form={formDetails}
                     >
-                        <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input product name!' }]}>
+                        <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input name!' }]}>
                             <InputComponent value={stateUserDetails.name} onChange={handleOnChangeDetails} name='name' />
                         </Form.Item>
 
-                        <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input product email!' }]}>
+                        <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input email!' }]}>
                             <InputComponent value={stateUserDetails.email} onChange={handleOnChangeDetails} name='email' />
                         </Form.Item>
 
                         <Form.Item label="Phone" name="phone" rules={[{ required: true, message: 'Please input phone!' }]}>
                             <InputComponent value={stateUserDetails.phone} onChange={handleOnChangeDetails} name='phone' />
                         </Form.Item>
-
-                        {/* <Form.Item
-                            label="Image"
-                            name="image"
-                            rules={[{ required: true, message: 'Please input your count image!' }]}
-                        >
-                            <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
-                                <Button>Select File</Button>
-                                {stateProductDetails?.image && (
-                                    <img
-                                        src={stateProductDetails?.image}
-                                        style={{
-                                            height: '60px',
-                                            width: '60px',
-                                            borderRadius: '50%',
-                                            objectFit: 'cover',
-                                            marginLeft: '10px',
-                                        }}
-                                        alt="avatar"
-                                    />
-                                )}
-                            </WrapperUploadFile>
-                        </Form.Item> */}
                         <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
                             <Button type="primary" htmlType="submit">
                                 Apply

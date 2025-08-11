@@ -96,6 +96,11 @@ const AdminProduct = () => {
         return ProductService.deleteProduct(id, token);
     });
 
+    const mutationDeletedMany = useMutationHooks((data) => {
+        const { token, ...ids } = data;
+        return ProductService.deleteManyProduct(ids, token);
+    });
+
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct()
         return res
@@ -123,19 +128,30 @@ const AdminProduct = () => {
     }, [formDetails, stateProductDetails, isOpenDrawer])
 
     useEffect(() => {
-        if (rowSelected) {
+        if (rowSelected && isOpenDrawer) {
+            setIsPendingUpdate(true)
             fetchGetDetailsProduct(rowSelected)
         }
-    }, [rowSelected])
+    }, [rowSelected, isOpenDrawer])
 
 
     const handleDetailsProduct = () => {
         setIsOpenDrawer(true)
     }
 
+    const handleDeleteManyProduct = (ids) => {
+        mutationDeletedMany.mutate({ ids: ids, token: user?.access_token }, {
+            onSettled: () => {
+                queryProduct.refetch()
+            }
+        })
+    }
+
     const { data, isPending, isSuccess, isError } = mutation
     const { data: dataUpdated, isPending: isPendingUpdated, isSuccess: isSuccessUpdated, isError: isErrorUpdated } = mutationUpdate
     const { data: dataDeleted, isPending: isPendingDeleted, isSuccess: isSuccessDeleted, isError: isErrorDeleted } = mutationDeleted
+    const { data: dataDeletedMany, isPending: isPendingDeletedMany, isSuccess: isSuccessDeletedMany, isError: isErrorDeletedMany } = mutationDeletedMany
+
     const queryProduct = useQuery({
         queryKey: ['products'],
         queryFn: getAllProduct
@@ -298,6 +314,14 @@ const AdminProduct = () => {
     }, [isSuccess, data, isError])
 
     useEffect(() => {
+        if (isSuccessDeletedMany && dataDeletedMany?.status === 'OK') {
+            message.success()
+        } else if (isErrorDeletedMany) {
+            message.error()
+        }
+    }, [isSuccessDeletedMany, dataDeletedMany, isErrorDeletedMany])
+
+    useEffect(() => {
         if (isSuccessUpdated && dataUpdated?.status === 'OK') {
             message.success()
             handleCloseDrawer()
@@ -429,7 +453,7 @@ const AdminProduct = () => {
             </div>
 
             <div style={{ marginTop: '20px' }}>
-                <TableComponent columns={columns} isPending={isPendingProducts} data={dataTable} onRow={(record, rowIndex) => {
+                <TableComponent handleDeleteMany={handleDeleteManyProduct} columns={columns} isPending={isPendingProducts} data={dataTable} onRow={(record, rowIndex) => {
                     return {
                         onClick: (event) => {
                             setRowSelected(record._id)
