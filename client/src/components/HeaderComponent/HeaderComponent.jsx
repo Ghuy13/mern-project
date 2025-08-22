@@ -1,4 +1,4 @@
-import { Badge, Button, Col, Popover } from 'antd';
+import { Badge, Col, Popover } from 'antd';
 import { WrapperContentPopup, WrapperHeader, WrapperTextHeader, WrapperTextHeaderSmall, WrapprerHeaderAccount } from './style';
 import {
     CaretDownOutlined,
@@ -13,6 +13,7 @@ import { resetUser } from '../../redux/slides/userSlice';
 import { useDispatch } from 'react-redux';
 import Loading from '../LoadingComponent/LoadingComponent';
 import { useEffect, useState } from 'react';
+import { searchProduct } from '../../redux/slides/productSlice';
 
 const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     const navigate = useNavigate() // Lấy hàm 'navigate' từ React Router để chuyển hướng trang
@@ -20,6 +21,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     const dispatch = useDispatch() // Lấy hàm 'dispatch' từ Redux để gửi các action
     const [userName, setUserName] = useState('')
     const [userAvatar, setUserAvatar] = useState('')
+    const [search, setSearch] = useState('')
     const [loading, setloading] = useState(false)
     const handleNavigateLogin = () => {
         navigate('/sign-in')  // Gọi hàm 'navigate' để chuyển hướng người dùng đến đường dẫn '/sign-in'
@@ -45,8 +47,12 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
             <WrapperContentPopup onClick={handleLogout}>Đăng xuất</WrapperContentPopup>
         </div>
     );
-    return (
+    const onSearch = (e) => {
+        setSearch(e.target.value);
+        dispatch(searchProduct(e.target.value));
+    }
 
+    return (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', background: 'rgb(162, 42, 41)' }}>
             <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset' }}>
                 <Col span={5}>
@@ -58,6 +64,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                             size="large"
                             textButton="Tìm kiếm"
                             placeholder="Bạn tìm gì hôm nay?"
+                            onChange={onSearch}
                         />
                     </Col>
                 )}

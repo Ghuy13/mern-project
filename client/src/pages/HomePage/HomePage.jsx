@@ -7,37 +7,52 @@ import banner3 from '../../assets/images/banner3.png';
 import CardComponent from "../../components/CardComponent/CardComponent";
 import * as ProductService from "../../services/ProductService";
 import { useQuery } from '@tanstack/react-query';
+import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import Loading from "../../components/LoadingComponent/LoadingComponent";
+import { useDebounce } from "../../hooks/useDebounce";
 
 
 const HomePage = () => {
+    const searchProduct = useSelector((state) => state?.product?.search);
+    const searchDebounced = useDebounce(searchProduct, 1000);
+    const refSearch = useRef();
+    const [pending, setPending] = useState(false);
+    const [stateProduct, setStateProduct] = useState([])
     const arr = ['Iphone', 'Mac', 'LapTop', 'Watch'];
-    // --------------------------------
-    // const fetchProductAll = async () => {
-    //     const res = await ProductService.getAllProduct();
-    //     console.log('res', res);
-    //     return res; // phải return để React Query nhận được data
-    // };
-    const fetchProductAll = async () => {
-        try {
-            const res = await ProductService.getAllProduct();
-            console.log('res', res);
-            return res;
-        } catch (error) {
-            console.log('fetchProductAll error:', error);
-            throw error;
-        }
-    };
+
+    const fetchProductAll = async (search) => {
+        const res = await ProductService.getAllProduct(search);
+        return res;
+    }
+
+    // useEffect(() => {
+    //     if (refSearch.current) {
+    //         setPending(true);
+    //         fetchProductAll(searchDebounced)
+    //     }
+    //     refSearch.current = true;
+    //     setPending(false);
+    // }, [searchDebounced])
 
     const { isPending, data: products } = useQuery({
-        queryKey: ['products'],
-        queryFn: fetchProductAll,
+        queryKey: ['products', searchDebounced],
+        queryFn: () => fetchProductAll(searchDebounced),
         retry: 3,
         retryDelay: 1000,
+        enabled: !!searchDebounced,
     });
-    console.log('data', products);
-    // --------------------------------
+
+    useEffect(() => {
+        if (products?.data?.length > 0) {
+            setStateProduct(products?.data);
+        } else {
+            setStateProduct([]); // clear khi không có kết quả
+        }
+    }, [products]);
+
     return (
-        <>
+        <Loading isPending={isPending || pending} >
             <div style={{ width: '1270px', margin: '0 auto' }}>
                 <WrapperTypeProduct>
                     {arr.map((item) => (
@@ -49,7 +64,7 @@ const HomePage = () => {
                 <div id="container" style={{ height: "1000px", width: "1270px", margin: "0 auto" }}>
                     <SliderComponent arrImage={[banner1, banner2, banner3]} />
                     <WrapperProducts>
-                        {products?.data?.map((products) => {
+                        {stateProduct?.map((products) => {
                             return (
                                 <CardComponent
                                     key={products._id}
@@ -81,8 +96,9 @@ const HomePage = () => {
                     </div>
                 </div >
             </div>
-        </>
+        </Loading>
     );
 };
 
 export default HomePage;
+
