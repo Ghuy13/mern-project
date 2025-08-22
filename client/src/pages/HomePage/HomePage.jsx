@@ -8,7 +8,7 @@ import CardComponent from "../../components/CardComponent/CardComponent";
 import * as ProductService from "../../services/ProductService";
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../components/LoadingComponent/LoadingComponent";
 import { useDebounce } from "../../hooks/useDebounce";
 
@@ -16,38 +16,34 @@ import { useDebounce } from "../../hooks/useDebounce";
 const HomePage = () => {
     const searchProduct = useSelector((state) => state?.product?.search);
     const searchDebounced = useDebounce(searchProduct, 1000);
-    const refSearch = useRef();
     const [pending, setPending] = useState(false);
     const [stateProduct, setStateProduct] = useState([])
+    const [limit, setLimit] = useState(6);
     const arr = ['Iphone', 'Mac', 'LapTop', 'Watch'];
 
-    const fetchProductAll = async (search) => {
-        const res = await ProductService.getAllProduct(search);
+
+    const fetchProductAll = async (context) => {
+        const limit = context?.queryKey && context?.queryKey[1]
+        const search = context?.queryKey && context?.queryKey[2]
+        const res = await ProductService.getAllProduct(search, limit);
         return res;
     }
 
-    // useEffect(() => {
-    //     if (refSearch.current) {
-    //         setPending(true);
-    //         fetchProductAll(searchDebounced)
-    //     }
-    //     refSearch.current = true;
-    //     setPending(false);
-    // }, [searchDebounced])
-
-    const { isPending, data: products } = useQuery({
-        queryKey: ['products', searchDebounced],
-        queryFn: () => fetchProductAll(searchDebounced),
+    const { isPending, data: products, isPreviousData } = useQuery({
+        queryKey: ['products', limit, searchDebounced],
+        queryFn: fetchProductAll,
         retry: 3,
         retryDelay: 1000,
-        enabled: !!searchDebounced,
+        keepPreviousData: true,
     });
+
+    console.log("isPreviousData", isPreviousData, "products", products);
 
     useEffect(() => {
         if (products?.data?.length > 0) {
             setStateProduct(products?.data);
         } else {
-            setStateProduct([]); // clear khi không có kết quả
+            setStateProduct([]);
         }
     }, [products]);
 
@@ -86,12 +82,16 @@ const HomePage = () => {
                             textButton="Xem thêm"
                             styleButton={{
                                 border: "1px solid rgb(11, 116, 229)",
-                                color: "rgb(11, 116, 229)",
+                                color: "${products?.total === products?.data?.length ? '#ccc' : 'rgb(11, 116, 229)'}",
                                 width: "240px",
                                 height: "38px",
                                 borderRadius: "4px",
                             }}
-                            styleTextButton={{ fontWeight: "500" }}
+                            disabled={products?.total === products?.data?.length || products?.totalPage === 1}
+                            styleTextButton={{ fontWeight: "500", color: products?.total === products?.data?.length && '#fff' }}
+                            onClick={() => {
+                                setLimit((prev) => prev + 6);
+                            }}
                         />
                     </div>
                 </div >
