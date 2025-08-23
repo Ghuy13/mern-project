@@ -21,7 +21,6 @@ const HomePage = () => {
     const [limit, setLimit] = useState(6);
     const arr = ['Iphone', 'Mac', 'LapTop', 'Watch'];
 
-
     const fetchProductAll = async (context) => {
         const limit = context?.queryKey && context?.queryKey[1]
         const search = context?.queryKey && context?.queryKey[2]
@@ -36,8 +35,6 @@ const HomePage = () => {
         retryDelay: 1000,
         keepPreviousData: true,
     });
-
-    console.log("isPreviousData", isPreviousData, "products", products);
 
     useEffect(() => {
         if (products?.data?.length > 0) {
@@ -73,6 +70,7 @@ const HomePage = () => {
                                     type={products.type}
                                     selled={products.selled}
                                     discount={products.discount}
+                                    id={products._id}
                                 />
                             )
                         })}

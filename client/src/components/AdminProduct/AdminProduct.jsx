@@ -72,20 +72,7 @@ const AdminProduct = () => {
         return res
     });
 
-    // const mutationUpdate = useMutationHooks((data) => {
-    //     console.log('data', data)
-    //     const {
-    //         id,
-    //         token,
-    //         ...rests } = data;
-    //     const res = ProductService.updateProduct({
-    //         id,
-    //         token,
-    //         rests
-    //     });
-    //     return res
-    // });
-    console.log('rowSelected', rowSelected)
+
     const mutationUpdate = useMutationHooks((data) => {
         const { id, token, ...rests } = data;
         return ProductService.updateProduct(id, token, { ...rests });
@@ -121,6 +108,7 @@ const AdminProduct = () => {
         }
         setIsPendingUpdate(false)
     }
+
     useEffect(() => {
         if (isOpenDrawer) {
             formDetails.setFieldsValue(stateProductDetails)
