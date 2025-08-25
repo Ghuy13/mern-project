@@ -15,7 +15,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 
 const HomePage = () => {
     const searchProduct = useSelector((state) => state?.product?.search);
-    const searchDebounced = useDebounce(searchProduct, 1000);
+    const searchDebounced = useDebounce(searchProduct, 500);
     const [pending, setPending] = useState(false);
     const [stateProduct, setStateProduct] = useState([])
     const [typeProduct, setTypeProduct] = useState([]);
