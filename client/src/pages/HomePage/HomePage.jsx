@@ -8,7 +8,7 @@ import CardComponent from "../../components/CardComponent/CardComponent";
 import * as ProductService from "../../services/ProductService";
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Loading from "../../components/LoadingComponent/LoadingComponent";
 import { useDebounce } from "../../hooks/useDebounce";
 
@@ -18,14 +18,22 @@ const HomePage = () => {
     const searchDebounced = useDebounce(searchProduct, 1000);
     const [pending, setPending] = useState(false);
     const [stateProduct, setStateProduct] = useState([])
+    const [typeProduct, setTypeProduct] = useState([]);
     const [limit, setLimit] = useState(6);
-    const arr = ['Iphone', 'Mac', 'LapTop', 'Watch'];
+
 
     const fetchProductAll = async (context) => {
         const limit = context?.queryKey && context?.queryKey[1]
         const search = context?.queryKey && context?.queryKey[2]
         const res = await ProductService.getAllProduct(search, limit);
         return res;
+    }
+
+    const fetchAllTypeProduct = async () => {
+        const res = await ProductService.getAllTypeProduct();
+        if (res?.status === 'OK') {
+            setTypeProduct(res?.data)
+        }
     }
 
     const { isPending, data: products, isPreviousData } = useQuery({
@@ -44,11 +52,15 @@ const HomePage = () => {
         }
     }, [products]);
 
+    useEffect(() => {
+        fetchAllTypeProduct();
+    }, [])
+
     return (
         <Loading isPending={isPending || pending} >
             <div style={{ width: '1270px', margin: '0 auto' }}>
                 <WrapperTypeProduct>
-                    {arr.map((item) => (
+                    {typeProduct.map((item) => (
                         <TypeProduct name={item} key={item} />
                     ))}
                 </WrapperTypeProduct>

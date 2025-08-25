@@ -105,7 +105,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                         </WrapprerHeaderAccount>
                     </Loading>
                     {!isHiddenCart && (
-                        <div>
+                        <div onClick={() => navigate('/order')} style={{ cursor: 'pointer' }}>
                             <Badge count={5} size='small'>
                                 <ShoppingCartOutlined style={{ fontSize: '28px', color: '#fff' }} />
                             </Badge>
