@@ -5,7 +5,7 @@ import imageLogo from '../../assets/images/logo_login.png';
 import { Image } from "antd";
 import { useState, useEffect } from "react";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as UserService from '../../services/UserService';
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/LoadingComponent";
@@ -15,6 +15,7 @@ import { updateUser } from "../../redux/slides/userSlice";
 
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] = useState(false);
+    const location = useLocation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -26,18 +27,19 @@ const SignInPage = () => {
     const { data, isPending, isSuccess, } = mutation;
 
     useEffect(() => {
-        if (isSuccess) {
-            navigate('/'); // Navigate to home page on success
-            localStorage.setItem('access_token', JSON.stringify(data?.access_token)); // Store user data in localStorage
-            if (data?.access_token) {
-                const decoded = jwtDecode(data?.access_token);
-                console.log('Decoded:', decoded);
-                if (decoded?.id) {
-                    handleGetDetailsUser(decoded?.id, data?.access_token);
-                }
+        if (isSuccess && data?.access_token) {
+            localStorage.setItem('access_token', JSON.stringify(data.access_token));
+            const decoded = jwtDecode(data.access_token);
+            if (decoded?.id) {
+                handleGetDetailsUser(decoded.id, data.access_token);
+            }
+            if (location?.state?.from) {
+                navigate(location.state.from);
+            } else {
+                navigate('/');
             }
         }
-    }, [isSuccess])
+    }, [isSuccess, data, location, navigate]);
 
     const handleGetDetailsUser = async (id, token) => {
         const res = await UserService.getDetailsUser(id, token);
@@ -56,7 +58,6 @@ const SignInPage = () => {
 
     const handleSignIn = () => {
         mutation.mutate({ email, password });
-        console.log('sign-in', email, password);
     };
 
     return (

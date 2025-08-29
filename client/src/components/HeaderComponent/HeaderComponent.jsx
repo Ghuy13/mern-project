@@ -1,10 +1,6 @@
 import { Badge, Col, Popover } from 'antd';
 import { WrapperContentPopup, WrapperHeader, WrapperTextHeader, WrapperTextHeaderSmall, WrapprerHeaderAccount } from './style';
-import {
-    CaretDownOutlined,
-    ShoppingCartOutlined,
-    UserOutlined
-} from '@ant-design/icons';
+import { CaretDownOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import ButtonInputSearch from '../ButtonInputSearch/ButtonInputSearch';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -22,6 +18,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     const [userName, setUserName] = useState('')
     const [userAvatar, setUserAvatar] = useState('')
     const [search, setSearch] = useState('')
+    const order = useSelector((state) => state?.order)
     const [loading, setloading] = useState(false)
     const handleNavigateLogin = () => {
         navigate('/sign-in')  // Gọi hàm 'navigate' để chuyển hướng người dùng đến đường dẫn '/sign-in'
@@ -54,7 +51,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
 
     return (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', background: 'rgb(162, 42, 41)' }}>
-            <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset' }}>
+            <WrapperHeader style={{ justifyContent: isHiddenSearch ? 'space-between' : 'unset' }}>
                 <Col span={5}>
                     <WrapperTextHeader>GEAR VN </WrapperTextHeader>
                 </Col>
@@ -101,12 +98,11 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                                     </div>
                                 </div>
                             )}
-
                         </WrapprerHeaderAccount>
                     </Loading>
                     {!isHiddenCart && (
                         <div onClick={() => navigate('/order')} style={{ cursor: 'pointer' }}>
-                            <Badge count={5} size='small'>
+                            <Badge count={order?.orderItems?.reduce((sum, item) => sum + item.amount, 0)} size='small'>
                                 <ShoppingCartOutlined style={{ fontSize: '28px', color: '#fff' }} />
                             </Badge>
                             <WrapperTextHeaderSmall>Giỏ hàng</WrapperTextHeaderSmall>
