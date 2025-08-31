@@ -1,22 +1,33 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Button, Typography, Divider, Empty, Popconfirm, message } from "antd";
+import { Table, Button, Typography, Divider, Empty, Popconfirm, message, Modal, Form, Input } from "antd";
 import { WrapperOrderPage, WrapperTotal, WrapperFooter, WrapperButtonGroup } from "./style";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { removeOrderProduct, increaseAmount, decreaseAmount } from "../../redux/slides/orderSlice";
+import { removeOrderProduct, increaseAmount, decreaseAmount, clearOrder } from "../../redux/slides/orderSlice";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import * as OrderService from "../../services/OrderService";
 
 const { Title, Text } = Typography;
 
 const OrderPage = () => {
     const order = useSelector((state) => state.order);
+    const user = useSelector((state) => state.user); // Lấy user từ redux
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [form] = Form.useForm();
 
     useEffect(() => {
         localStorage.setItem("order", JSON.stringify(order));
     }, [order]);
+
+    // Khi mở modal, tự động set email nếu có user
+    useEffect(() => {
+        if (isModalOpen && user?.email) {
+            form.setFieldsValue({ email: user.email });
+        }
+    }, [isModalOpen, user, form]);
 
     const columns = [
         {
@@ -98,6 +109,31 @@ const OrderPage = () => {
         message.success("Đã xóa sản phẩm đã chọn!");
     };
 
+    // Xử lý submit form đặt hàng
+    const handleOrder = async (values) => {
+        const orderInfo = {
+            name: values.name,
+            email: values.email,
+            phone: values.phone,
+            address: values.address,
+            totalPrice,
+            items: order.orderItems,
+        };
+        try {
+            const res = await OrderService.createOrder(orderInfo);
+            if (res?.data?.status === "OK") {
+                dispatch(clearOrder());
+                localStorage.removeItem("order");
+                setIsModalOpen(false);
+                navigate("/order-success", { state: { orderInfo } });
+            } else {
+                message.error("Đặt hàng thất bại!");
+            }
+        } catch (err) {
+            message.error("Lỗi kết nối server!");
+        }
+    };
+
     return (
         <WrapperOrderPage>
             <Title level={2}>Giỏ hàng của bạn</Title>
@@ -132,7 +168,12 @@ const OrderPage = () => {
                                 {totalPrice.toLocaleString()} đ
                             </Text>
                         </WrapperTotal>
-                        <Button type="primary" size="large" style={{ marginLeft: 16 }}>
+                        <Button
+                            type="primary"
+                            size="large"
+                            style={{ marginLeft: 16 }}
+                            onClick={() => setIsModalOpen(true)}
+                        >
                             Thanh toán
                         </Button>
                     </WrapperFooter>
@@ -143,6 +184,59 @@ const OrderPage = () => {
                     >
                         Tiếp tục mua sắm
                     </Button>
+                    <Modal
+                        title="Thông tin khách hàng"
+                        open={isModalOpen}
+                        onCancel={() => setIsModalOpen(false)}
+                        footer={null}
+                        destroyOnClose
+                    >
+                        <Form
+                            form={form}
+                            layout="vertical"
+                            onFinish={handleOrder}
+                        >
+                            <Form.Item
+                                label="Tên người nhận"
+                                name="name"
+                                rules={[{ required: true, message: "Vui lòng nhập tên người nhận!" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Email"
+                                name="email"
+                                rules={[
+                                    { required: true, message: "Vui lòng nhập email!" },
+                                    { type: "email", message: "Email không hợp lệ!" }
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Số điện thoại"
+                                name="phone"
+                                rules={[
+                                    { required: true, message: "Vui lòng nhập số điện thoại!" },
+                                    { pattern: /^[0-9]{9,11}$/, message: "Số điện thoại không hợp lệ!" }
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Địa chỉ"
+                                name="address"
+                                rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit" block>
+                                    Đặt hàng ngay
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Modal>
                 </>
             )}
         </WrapperOrderPage>
@@ -150,5 +244,3 @@ const OrderPage = () => {
 };
 
 export default OrderPage;
-
-// 54

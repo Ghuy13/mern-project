@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addOrderProduct, decreaseAmount, increaseAmount } from "../../redux/slides/orderSlice";
+import { convertPrice } from "../../untils";
 
 const ProductDetailsComponent = ({ idProduct }) => {
     const [numProduct, setNumProduct] = useState(1);
@@ -47,17 +48,6 @@ const ProductDetailsComponent = ({ idProduct }) => {
         if (!user?.id) {
             navigate('/sign-in', { state: { from: location?.pathname } });
         } else {
-            // {
-            //     name: { type: String, required: true },
-            //     amount: { type: Number, required: true },
-            //     image: { type: String, required: true },
-            //     price: { type: Number, required: true },
-            //     product: {
-            //         type: mongoose.Schema.Types.ObjectId,
-            //             ref: 'Product',
-            //                 required: true
-            //     },
-            // },
             dispatch(addOrderProduct({
                 name: productDetails?.name,
                 amount: numProduct,
@@ -102,7 +92,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
                         <WrapperStyleTextSell>Đã bán 1000+</WrapperStyleTextSell>
                     </div>
                     <WrapperPriceProduct>
-                        <WrapperPriceTextProduct> {productDetails?.price} </WrapperPriceTextProduct>
+                        <WrapperPriceTextProduct> {convertPrice(productDetails?.price)} </WrapperPriceTextProduct>
                     </WrapperPriceProduct>
                     <WrapperAddressProduct>
                         <span>Giao đến</span>
@@ -123,7 +113,6 @@ const ProductDetailsComponent = ({ idProduct }) => {
                     </div>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                         <ButtonComponent
-                            // bordered={false}
                             size={40}
                             styleButton={{
                                 background: 'rgb(255, 38, 38)',

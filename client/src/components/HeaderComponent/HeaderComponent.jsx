@@ -38,6 +38,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     const content = (
         <div>
             <WrapperContentPopup onClick={() => navigate('/profile-user')}>Thông tin người dùng</WrapperContentPopup>
+            <WrapperContentPopup onClick={() => navigate('/my-orders')}>Đơn hàng của bạn</WrapperContentPopup>
             {user?.isAdmin && (
                 <WrapperContentPopup onClick={() => navigate('/system/admin')}>Quản lý hệ thống</WrapperContentPopup>
             )}
@@ -53,7 +54,12 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', background: 'rgb(162, 42, 41)' }}>
             <WrapperHeader style={{ justifyContent: isHiddenSearch ? 'space-between' : 'unset' }}>
                 <Col span={5}>
-                    <WrapperTextHeader>GEAR VN </WrapperTextHeader>
+                    <WrapperTextHeader
+                        onClick={() => navigate('/')}
+                        style={{ cursor: 'pointer', fontSize: '20px', fontWeight: 'bold' }}
+                    >
+                        TECH-STORE
+                    </WrapperTextHeader>
                 </Col>
                 {!isHiddenSearch && (
                     <Col span={13}>

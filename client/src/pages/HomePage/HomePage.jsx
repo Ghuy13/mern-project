@@ -8,7 +8,7 @@ import CardComponent from "../../components/CardComponent/CardComponent";
 import * as ProductService from "../../services/ProductService";
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from "react-redux";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../components/LoadingComponent/LoadingComponent";
 import { useDebounce } from "../../hooks/useDebounce";
 

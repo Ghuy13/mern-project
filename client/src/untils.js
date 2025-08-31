@@ -40,3 +40,15 @@ export const renderOptions = (arr) => {
     })
     return results;
 }
+
+export const convertPrice = (price) => {
+    try {
+        return new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(price);
+    } catch (error) {
+        return null;
+    }
+};
+

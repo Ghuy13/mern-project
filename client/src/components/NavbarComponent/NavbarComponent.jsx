@@ -1,53 +1,41 @@
-import { Checkbox, Col, Rate, Row } from "antd";
-import { WrapperContent, WrapperLableText, WrapperTextPrice, WrapperTextValue } from "./style";
+import { WrapperContent, WrapperLableText, WrapperTextValue } from "./style";
+import { useEffect, useState } from "react";
+import * as ProductService from "../../services/ProductService";
+import { useNavigate } from "react-router-dom";
 
 const NavbarComponent = () => {
-    const onChange = () => { };
+    const [typeProduct, setTypeProduct] = useState([]);
+    const navigate = useNavigate();
 
-    const renderContent = (type, options) => {
-        switch (type) {
-            case 'text':
-                return options.map((option,) => (
-                    <WrapperTextValue >{option}</WrapperTextValue>
-                ));
-            case 'checkbox':
-                return (
-                    <Checkbox.Group style={{ width: '100%', display: "flex ", flexDirection: 'column', gap: '12px' }} onChange={onChange}>
-                        {options.map((option,) => (
-                            <Checkbox style={{ marginLeft: '0' }} value={option.value}>
-                                {option.label}
-                            </Checkbox>
-                        ))}
-                    </Checkbox.Group>
-                );
-            case 'star':
-                return options.map((option) => {
-                    return (
-                        <div style={{ display: 'flex', gap: '4px' }}>
-                            <Rate style={{ fontSize: '12px' }} disabled defaultValue={option} />
-                            <span>{`từ ${option} sao`}</span>
-                        </div>
+    useEffect(() => {
+        const fetchAllTypeProduct = async () => {
+            const res = await ProductService.getAllTypeProduct();
+            if (res?.status === 'OK') {
+                setTypeProduct(res?.data);
+            }
+        };
+        fetchAllTypeProduct();
+    }, []);
 
-                    );
-                });
-
-            case 'price':
-                return options.map((option) => {
-                    return (
-                        <WrapperTextPrice>{option}</WrapperTextPrice>
-                    );
-                });
-
-            default:
-                return {}
-        }
+    const handleNavigateType = (type) => {
+        // Chuẩn hóa giống HomePage/TypeProduct.jsx
+        const urlType = type.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_");
+        navigate(`/product/${urlType}`, { state: type });
     };
 
     return (
         <div>
-            <WrapperLableText>Lable</WrapperLableText>
+            <WrapperLableText>Loại sản phẩm</WrapperLableText>
             <WrapperContent>
-                {renderContent('text', ['Laptop', 'Laptop Gamming', 'Mac', 'Iphone'])}
+                {typeProduct.map((item) => (
+                    <WrapperTextValue
+                        key={item}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleNavigateType(item)}
+                    >
+                        {item}
+                    </WrapperTextValue>
+                ))}
             </WrapperContent>
         </div>
     );
