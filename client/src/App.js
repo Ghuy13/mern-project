@@ -1,11 +1,10 @@
-
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 // import HomePage from './pages/HomePage/HomePage'
 // import OrderPage from './pages/OrderPage/OrderPage'
 import { routes } from './routes'
 import DefaultComponent from './components/DefaultComponent/DefaultComponent'
 import { Fragment } from 'react/jsx-runtime'
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { isJsonString } from './untils'
 import { jwtDecode } from "jwt-decode";
 import * as UserService from '../src/services/UserService';
@@ -22,23 +21,38 @@ function App() {
   const user = useSelector((state) => state.user)
 
   useEffect(() => {
-    setIsPending(true)
-    const { storageData, decoded } = handleDecoded()
+    setIsPending(true);
+    const { decoded, token, user } = handleDecoded();
     if (decoded?.id) {
-      handleGetDetailsUser(decoded?.id, storageData);
+      // Nếu có user trong localStorage thì dispatch lên Redux
+      if (user) {
+        dispatch(updateUser({ ...user, access_token: token }));
+      } else {
+        // Nếu chưa có user, gọi API lấy thông tin user
+        handleGetDetailsUser(decoded.id, token);
+      }
     }
-    setIsPending(false)
-  }, [])
+    setIsPending(false);
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    const user = localStorage.getItem('user');
+    if (token && user) {
+      dispatch(updateUser({ ...JSON.parse(user), access_token: token }));
+    }
+  }, []);
 
   const handleDecoded = () => {
-    let storageData = localStorage.getItem('access_token')
-    let decoded = {}
-    if (storageData && isJsonString(storageData)) {
-      storageData = JSON.parse(storageData)
-      decoded = jwtDecode(storageData);
+    const token = localStorage.getItem('access_token');
+    let decoded = {};
+    if (token) {
+      decoded = jwtDecode(token);
     }
-    return { decoded, storageData };
-  }
+    // Nếu bạn lưu user vào localStorage khi đăng nhập:
+    const user = localStorage.getItem('user');
+    return { decoded, token, user: user ? JSON.parse(user) : null };
+  };
 
   UserService.axiosJWT.interceptors.request.use(async function (config) {
     const currentTime = new Date()

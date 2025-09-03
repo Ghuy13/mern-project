@@ -1,6 +1,6 @@
 import { Input } from "antd";
 
-const InputComponent = ({ size, placeholder, style, ...rests }) => {
+const InputComponent = ({ size, placeholder, style, textButton, ...rests }) => {
     return (
         <Input
             size={size}

@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Button, Typography, Divider, Empty, Popconfirm, message, Modal, Form, Input } from "antd";
+import { Table, Button, Typography, Divider, Empty, Popconfirm, message, Modal, Form, Input, Space } from "antd";
 import { WrapperOrderPage, WrapperTotal, WrapperFooter, WrapperButtonGroup } from "./style";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { removeOrderProduct, increaseAmount, decreaseAmount, clearOrder } from "../../redux/slides/orderSlice";
-import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import { PlusOutlined, MinusOutlined, LoginOutlined } from "@ant-design/icons";
 import * as OrderService from "../../services/OrderService";
 
 const { Title, Text } = Typography;
@@ -109,8 +109,13 @@ const OrderPage = () => {
         message.success("Đã xóa sản phẩm đã chọn!");
     };
 
-    // Xử lý submit form đặt hàng
     const handleOrder = async (values) => {
+        if (!user?.access_token) {
+            message.warning("Vui lòng đăng nhập để đặt hàng!");
+            navigate("/sign-in");
+            return;
+        }
+
         const orderInfo = {
             name: values.name,
             email: values.email,
@@ -119,18 +124,24 @@ const OrderPage = () => {
             totalPrice,
             items: order.orderItems,
         };
+
         try {
-            const res = await OrderService.createOrder(orderInfo);
+            const res = await OrderService.createOrder(orderInfo, user?.access_token);
             if (res?.data?.status === "OK") {
                 dispatch(clearOrder());
                 localStorage.removeItem("order");
                 setIsModalOpen(false);
-                navigate("/order-success", { state: { orderInfo } });
+                navigate("/order-success", { state: { orderInfo: res.data.data } });
             } else {
-                message.error("Đặt hàng thất bại!");
+                message.error(res?.data?.message || "Đặt hàng thất bại!");
             }
         } catch (err) {
-            message.error("Lỗi kết nối server!");
+            if (err.response?.status === 401) {
+                message.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
+                navigate("/sign-in");
+            } else {
+                message.error("Lỗi kết nối server!");
+            }
         }
     };
 
@@ -168,14 +179,26 @@ const OrderPage = () => {
                                 {totalPrice.toLocaleString()} đ
                             </Text>
                         </WrapperTotal>
-                        <Button
-                            type="primary"
-                            size="large"
-                            style={{ marginLeft: 16 }}
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            Thanh toán
-                        </Button>
+                        {user?.access_token ? (
+                            <Button
+                                type="primary"
+                                size="large"
+                                style={{ marginLeft: 16 }}
+                                onClick={() => setIsModalOpen(true)}
+                            >
+                                Thanh toán
+                            </Button>
+                        ) : (
+                            <Button
+                                type="primary"
+                                size="large"
+                                style={{ marginLeft: 16 }}
+                                icon={<LoginOutlined />}
+                                onClick={() => navigate("/sign-in")}
+                            >
+                                Đăng nhập để đặt hàng
+                            </Button>
+                        )}
                     </WrapperFooter>
                     <Button
                         type="default"
