@@ -1,10 +1,14 @@
 import HeaderComponent from "../HeaderComponent/HeaderComponent";
+import FooterComponent from "../FooterComponent/FooterComponent";
 
 const DefaultComponent = ({ children }) => {
     return (
-        <div>
+        <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
             <HeaderComponent />
-            {children}
+            <div style={{ flex: 1 }}>
+                {children}
+            </div>
+            <FooterComponent />
         </div>
     );
 };

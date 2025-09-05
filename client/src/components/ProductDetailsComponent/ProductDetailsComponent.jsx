@@ -1,5 +1,4 @@
-import { Col, Image, InputNumber, Rate, Row } from "antd";
-import imageProduct from '../../assets/images/test.png';
+import { Col, Image, Rate, Row } from "antd";
 import imageProductSmall from '../../assets/images/imageSmall.png';
 import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, WrapperQualitytProduct, WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleNameProduct, WrapperStyleTextSell } from "./style";
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
@@ -10,7 +9,7 @@ import Loading from "../LoadingComponent/LoadingComponent";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addOrderProduct, decreaseAmount, increaseAmount } from "../../redux/slides/orderSlice";
+import { addOrderProduct } from "../../redux/slides/orderSlice";
 import { convertPrice } from "../../untils";
 
 const ProductDetailsComponent = ({ idProduct }) => {

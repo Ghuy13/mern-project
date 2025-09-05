@@ -87,14 +87,26 @@ const ProfilePage = () => {
         });
     }
     return (
-        <div style={{ width: '1270px', margin: '0 auto', height: '500px' }}>
-            <WrapperHeader>Thông tin người dùng</WrapperHeader>
+        <div style={{ width: '100%', margin: '0 auto', minHeight: '100vh', backgroundColor: '#f5f6fa', padding: '20px 0' }}>
+            <WrapperHeader>Thông tin cá nhân</WrapperHeader>
             <Loading isPending={isPending} delay={0}>
                 <WrapperContentProfile>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                        {avatar && (
+                            <img src={avatar} style={{
+                                height: '120px',
+                                width: '120px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                                border: '3px solid #3498db',
+                                boxShadow: '0 0 10px rgba(0,0,0,0.1)'
+                            }} alt="avatar" />
+                        )}
+                    </div>
                     <WrapperInput>
-                        <WrapperLabel htmlFor="name">Name</WrapperLabel>
+                        <WrapperLabel htmlFor="name">Họ tên</WrapperLabel>
                         <InputForm
-                            style={{ width: '300px' }}
+                            style={{ width: '400px', height: '40px', borderRadius: '8px' }}
                             id='name'
                             value={name}
                             handleOnChange={handleOnchangeName}
@@ -115,7 +127,7 @@ const ProfilePage = () => {
                     <WrapperInput>
                         <WrapperLabel htmlFor="email">Email</WrapperLabel>
                         <InputForm
-                            style={{ width: '300px' }}
+                            style={{ width: '400px', height: '40px', borderRadius: '8px' }}
                             id='email'
                             value={email}
                             handleOnChange={handleOnchangeEmail}
@@ -134,9 +146,9 @@ const ProfilePage = () => {
                         />
                     </WrapperInput>
                     <WrapperInput>
-                        <WrapperLabel htmlFor="phone">Phone</WrapperLabel>
+                        <WrapperLabel htmlFor="phone">Điện thoại</WrapperLabel>
                         <InputForm
-                            style={{ width: '300px' }}
+                            style={{ width: '400px', height: '40px', borderRadius: '8px' }}
                             id='phone'
                             value={phone}
                             handleOnChange={handleOnchangePhone}
@@ -155,9 +167,9 @@ const ProfilePage = () => {
                         />
                     </WrapperInput>
                     <WrapperInput>
-                        <WrapperLabel htmlFor="address">Address</WrapperLabel>
+                        <WrapperLabel htmlFor="address">Địa chỉ</WrapperLabel>
                         <InputForm
-                            style={{ width: '300px' }}
+                            style={{ width: '400px', height: '40px', borderRadius: '8px' }}
                             id='address'
                             value={address}
                             handleOnChange={handleOnchangeAddress}
@@ -176,28 +188,25 @@ const ProfilePage = () => {
                         />
                     </WrapperInput>
                     <WrapperInput>
-                        <WrapperLabel htmlFor="avatar">Avatar</WrapperLabel>
+                        <WrapperLabel htmlFor="avatar">Ảnh đại diện</WrapperLabel>
                         <WrapperUploadFile
                             customRequest={({ onSuccess }) => setTimeout(() => onSuccess("ok"), 0)}
                             onChange={handleOnchangeAvatar}
                             maxCount={1}
                         >
-                            <Button icon={<UploadOutlined />}>Select File</Button>
+                            <Button
+                                icon={<UploadOutlined />}
+                                style={{
+                                    borderRadius: '8px',
+                                    height: '40px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                }}
+                            >
+                                Chọn ảnh
+                            </Button>
                         </WrapperUploadFile>
-                        {avatar && (
-                            <img src={avatar} style={{
-                                height: '60px',
-                                width: '60px',
-                                borderRadius: '50%',
-                                objectFit: 'cover',
-                            }} alt="avatar"></img>
-                        )}
-                        {/* <InputForm
-                            style={{ width: '300px' }}
-                            id='avatar'
-                            value={avatar}
-                            handleOnChange={handleOnchangeAvatar}
-                        /> */}
                         <ButtonComponent
                             onClick={handleUpdate}
                             size={40}

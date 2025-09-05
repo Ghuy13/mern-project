@@ -1,26 +1,39 @@
 import { WrapperContent, WrapperLableText, WrapperTextValue } from "./style";
 import { useEffect, useState } from "react";
 import * as ProductService from "../../services/ProductService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const NavbarComponent = () => {
     const [typeProduct, setTypeProduct] = useState([]);
+    const [activeType, setActiveType] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const fetchAllTypeProduct = async () => {
             const res = await ProductService.getAllTypeProduct();
-            if (res?.status === 'OK') {
+            if (res?.status === "OK") {
                 setTypeProduct(res?.data);
             }
         };
         fetchAllTypeProduct();
     }, []);
 
+    // cập nhật activeType khi load lại trang (dựa trên state từ router)
+    useEffect(() => {
+        if (location?.state) {
+            setActiveType(location.state);
+        }
+    }, [location]);
+
     const handleNavigateType = (type) => {
-        // Chuẩn hóa giống HomePage/TypeProduct.jsx
-        const urlType = type.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_");
+        const urlType = type
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/ /g, "_");
+
         navigate(`/product/${urlType}`, { state: type });
+        setActiveType(type);
     };
 
     return (
@@ -30,7 +43,7 @@ const NavbarComponent = () => {
                 {typeProduct.map((item) => (
                     <WrapperTextValue
                         key={item}
-                        style={{ cursor: "pointer" }}
+                        $active={activeType === item} // truyền prop active
                         onClick={() => handleNavigateType(item)}
                     >
                         {item}

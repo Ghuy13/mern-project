@@ -57,57 +57,75 @@ const HomePage = () => {
     }, [])
 
     return (
-        <Loading isPending={isPending || pending} >
-            <div style={{ width: '1270px', margin: '0 auto' }}>
+        <Loading isPending={isPending || pending}>
+            {/* Thanh loại sản phẩm */}
+            <div style={{ maxWidth: "1320px", margin: "0 auto", marginBottom: "20px" }}>
                 <WrapperTypeProduct>
                     {typeProduct.map((item) => (
-                        <TypeProduct name={item} key={item} />
+                        <div className="type-chip" key={item}>
+                            <TypeProduct name={item} />
+                        </div>
                     ))}
                 </WrapperTypeProduct>
             </div>
-            <div className="body" style={{ width: '100%', backgroundColor: "#efefef" }}>
-                <div id="container" style={{ height: "1000px", width: "1270px", margin: "0 auto" }}>
-                    <SliderComponent arrImage={[banner1, banner2, banner3]} />
+
+
+            <div className="body" style={{ width: "100%", backgroundColor: "#f9fafb", padding: "30px 0" }}>
+                <div id="container" style={{ maxWidth: "1320px", margin: "0 auto" }}>
+                    {/* Slider */}
+                    <div style={{ borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+                        <SliderComponent arrImage={[banner1, banner2, banner3]} />
+                    </div>
+
+                    {/* Danh sách sản phẩm */}
                     <WrapperProducts>
-                        {stateProduct?.map((products) => {
-                            return (
-                                <CardComponent
-                                    key={products._id}
-                                    countInStock={products.countInStock}
-                                    description={products.description}
-                                    image={products.image}
-                                    name={products.name}
-                                    price={products.price}
-                                    rating={products.rating}
-                                    type={products.type}
-                                    selled={products.selled}
-                                    discount={products.discount}
-                                    id={products._id}
-                                />
-                            )
-                        })}
+                        {stateProduct?.map((products) => (
+                            <CardComponent
+                                key={products._id}
+                                countInStock={products.countInStock}
+                                description={products.description}
+                                image={products.image}
+                                name={products.name}
+                                price={products.price}
+                                rating={products.rating}
+                                type={products.type}
+                                selled={products.selled}
+                                discount={products.discount}
+                                id={products._id}
+                            />
+                        ))}
                     </WrapperProducts>
-                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "10px" }}>
+
+                    {/* Nút Xem thêm */}
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "20px" }}>
                         <WrapperButtonMore
                             textButton="Xem thêm"
                             styleButton={{
-                                border: "1px solid rgb(11, 116, 229)",
-                                color: "${products?.total === products?.data?.length ? '#ccc' : 'rgb(11, 116, 229)'}",
+                                border: "none",
+                                background: "linear-gradient(90deg, #0b74e5, #0d5c80)",
+                                color: "#fff",
                                 width: "240px",
-                                height: "38px",
-                                borderRadius: "4px",
+                                height: "44px",
+                                borderRadius: "24px",
+                                fontSize: "16px",
+                                fontWeight: "500",
+                                transition: "0.3s",
                             }}
                             disabled={products?.total === products?.data?.length || products?.totalPage === 1}
-                            styleTextButton={{ fontWeight: "500", color: products?.total === products?.data?.length && '#fff' }}
+                            styleTextButton={{
+                                fontWeight: "500",
+                                color: products?.total === products?.data?.length ? "#ccc" : "#fff",
+                            }}
                             onClick={() => {
                                 setLimit((prev) => prev + 6);
                             }}
                         />
                     </div>
-                </div >
+                </div>
             </div>
         </Loading>
     );
+
 };
 
 export default HomePage;
