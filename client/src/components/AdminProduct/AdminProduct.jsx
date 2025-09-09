@@ -95,7 +95,9 @@ const AdminProduct = () => {
     });
 
     const getAllProduct = async () => {
-        const res = await ProductService.getAllProduct();
+        // Tạm thời set limit cao để lấy tất cả sản phẩm
+        const res = await ProductService.getAllProduct('', 1000);
+        console.log('Products response:', res);
         return res
     }
 
@@ -479,13 +481,23 @@ const AdminProduct = () => {
             </div>
 
             <div style={{ marginTop: '20px' }}>
-                <TableComponent handleDeleteMany={handleDeleteManyProduct} columns={columns} isPending={isPendingProducts} data={dataTable} onRow={(record, rowIndex) => {
-                    return {
-                        onClick: (event) => {
-                            setRowSelected(record._id)
-                        }, // click row
-                    };
-                }} />
+                <TableComponent
+                    handleDeleteMany={handleDeleteManyProduct}
+                    columns={columns}
+                    isPending={isPendingProducts}
+                    data={dataTable}
+                    pagination={{
+                        total: dataTable.length,
+                        pageSize: 10
+                    }}
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: (event) => {
+                                setRowSelected(record._id)
+                            },
+                        };
+                    }}
+                />
             </div>
 
             <ModalComponent
@@ -512,8 +524,6 @@ const AdminProduct = () => {
                         <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Please input product type!' }]}>
                             <Select
                                 name='type'
-                                // defaultValue="lucy"
-                                // style={{ width: 120 }} 
                                 value={stateProduct.type}
                                 onChange={handleChangeSelect}
                                 options={renderOptions(typeProduct?.data?.data)}
