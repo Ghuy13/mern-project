@@ -35,7 +35,7 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        console.log(req.body)  //-----------------------------
+        console.log(req.body)
         const { email, password } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ //xác thực email
         const isCheckEmail = reg.test(email)
