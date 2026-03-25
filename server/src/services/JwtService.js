@@ -9,7 +9,7 @@ const generalAccessToken = (payload) => {
     return access_token
 }
 
-const genneralRefreshToken = (payload) => {
+const generalRefreshToken = (payload) => {
     const refresh_token = jwt.sign({
         ...payload
     }, process.env.REFRESH_TOKEN, { expiresIn: '365d' })
@@ -47,7 +47,7 @@ const refreshTokenJwtService = (token) => {
 
 
 module.exports = {
-    genneralAccessToken,
-    genneralRefreshToken,
+    generalAccessToken,
+    generalRefreshToken,
     refreshTokenJwtService
 }
