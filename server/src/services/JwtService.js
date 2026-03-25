@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const { use } = require("react");
 dotenv.config()
 
-const genneralAccessToken = (payload) => {
+const generalAccessToken = (payload) => {
     const access_token = jwt.sign({
         ...payload
     }, process.env.ACCESS_TOKEN, { expiresIn: '1h' })
