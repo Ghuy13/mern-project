@@ -1,5 +1,6 @@
 {
     "root": "client",
+    "cleanUrls": true,
     "rewrites": [
         {
             "source": "/(.*)",
