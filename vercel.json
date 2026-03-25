@@ -2,10 +2,14 @@
     "root": "client",
     "cleanUrls": true,
     "trailingSlash": false,
-    "rewrites": [
+    "routes": [
         {
-            "source": "/(.*)",
+            "src": "/[^.]+(?<!\\.html)/?$",
             "destination": "/index.html"
+        },
+        {
+            "src": "/.*",
+            "dest": "/index.html"
         }
     ]
 }
