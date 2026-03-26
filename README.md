@@ -1,4 +1,4 @@
-<img width="691" height="342" alt="image" src="https://github.com/user-attachments/assets/d7e0411c-49ce-4558-89ac-9c8aa51405ef" /># MERN E-commerce Project
+# MERN E-commerce Project
 
 Dự án web thương mại điện tử xây dựng theo mô hình **MERN stack**:
 - **MongoDB**: lưu trữ dữ liệu người dùng, sản phẩm, đơn hàng.
