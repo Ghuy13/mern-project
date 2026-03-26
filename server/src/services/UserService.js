@@ -10,7 +10,7 @@ const createUser = (newUser) => {
                 email: email
             })
             if (checkUser !== null) {
-                resolve({
+                return resolve({
                     status: "ERR",
                     message: "The email is already"
                 })
@@ -21,7 +21,7 @@ const createUser = (newUser) => {
                 email,
                 password: hash,
                 phone,
-
+                isAdmin: false
             })
             if (createdUser) {
                 resolve({

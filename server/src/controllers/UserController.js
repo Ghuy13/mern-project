@@ -26,8 +26,10 @@ const createUser = async (req, res) => {
         const response = await UserService.createUser(req.body)
         return res.status(200).json(response)
     } catch (e) {
-        return res.status(404).json({
-            message: e
+        console.error('Sign-up error:', e)
+        return res.status(500).json({
+            status: 'ERR',
+            message: e.message || 'Server error'
         })
     }
 }
