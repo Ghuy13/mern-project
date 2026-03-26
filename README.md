@@ -8,7 +8,8 @@ Dự án web thương mại điện tử xây dựng theo mô hình **MERN stack
 ## Demo giao diện
 
 ### Đăng ký / Đăng nhập
-<img width="711" height="341" alt="image" src="https://github.com/user-attachments/assets/87740b69-6530-4c3b-a3b9-9c537530a3e7" />
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/87740b69-6530-4c3b-a3b9-9c537530a3e7" />
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/f320c412-2b8b-4824-9dff-026623bf881d" />
 
 
 
