@@ -1,4 +1,4 @@
-# MERN E-commerce Project
+<img width="691" height="342" alt="image" src="https://github.com/user-attachments/assets/d7e0411c-49ce-4558-89ac-9c8aa51405ef" /># MERN E-commerce Project
 
 Dự án web thương mại điện tử xây dựng theo mô hình **MERN stack**:
 - **MongoDB**: lưu trữ dữ liệu người dùng, sản phẩm, đơn hàng.
@@ -11,35 +11,35 @@ Dự án web thương mại điện tử xây dựng theo mô hình **MERN stack
 <img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/87740b69-6530-4c3b-a3b9-9c537530a3e7" />
 <img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/f320c412-2b8b-4824-9dff-026623bf881d" />
 
-
-
 ### Trang chủ
-![Uploading image.png…]()
-
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/4c2bc817-404f-4657-8a9e-a34a326dbaa2" />
 
 ### Thông tin người dùng
-![Profile](./demo/profile.png)
+<img width="642" height="389" alt="image" src="https://github.com/user-attachments/assets/611488bf-57c2-4b8e-9727-6e794da35e52" />
 
 ### Tìm kiếm sản phẩm
-![Search](./demo/search.png)
+<img width="720" height="343" alt="image" src="https://github.com/user-attachments/assets/991eaca9-454d-4aac-8c7c-77934b83056d" />
+<img width="716" height="344" alt="image" src="https://github.com/user-attachments/assets/29c95548-913a-4139-ba8e-d895fe2c4119" />
 
 ### Chi tiết sản phẩm
-![Product Detail](./demo/product-detail.png)
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/adcaaa4e-6d4c-4fc0-9ee7-fde056cf1f00" />
 
 ### Giỏ hàng
-![Cart](./demo/cart.png)
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/b7936651-a22d-4505-9f6b-8171d2f0896f" />
 
 ### Thanh toán
-![Checkout](./demo/checkout.png)
-
-### Đặt hàng thành công
-![Success](./demo/success.png)
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/32d3e536-8c83-43dd-b9d1-2661bdc3cd49" />
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/b9c4c347-43d3-44cf-9fdb-302db714d36c" />
 
 ### Đơn hàng của bạn
-![My Orders](./demo/my-orders.png)
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/9c1b7e9d-2337-4ad0-ad7f-83ccad13e6bb" />
 
 ### Admin - Quản lý
-![Admin](./demo/admin.png)
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/04f13890-2795-46e0-afa3-d6f21ecb4f11" />
+<img width="700" height="300" alt="image" src="https://github.com/user-attachments/assets/c50364aa-5d29-4ff5-bd8f-c31d57ea38c0" />
+![Uploading image.png…]()
+![Uploading image.png…]()
+
 
 ## 1) Cấu trúc thư mục
 
