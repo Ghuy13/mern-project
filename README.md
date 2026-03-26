@@ -9,6 +9,8 @@ Dự án web thương mại điện tử xây dựng theo mô hình **MERN stack
 
 ### Banner trang chủ
 ![Demo banner](./client/src/assets/images/banner1.png)
+![Uploading image.png…]()
+
 
 ### Logo dự án
 ![Demo logo](./client/src/assets/images/logo.png)
