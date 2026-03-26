@@ -18,24 +18,24 @@ axiosJWT.interceptors.request.use(
 );
 
 export const createOrder = async (data) => {
-    const res = await axiosJWT.post(`${process.env.REACT_APP_API_URL}/order/create`, data);
+    const res = await axiosJWT.post(`/api/order/create`, data);
     return res;
 };
 
 // Lấy đơn hàng của user hiện tại
 export const getMyOrders = async () => {
-    const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL}/order/my-orders`);
+    const res = await axiosJWT.get(`/api/order/my-orders`);
     return res;
 };
 
 // Lấy tất cả đơn hàng (chỉ admin)
 export const getAllOrder = async () => {
-    const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL}/order/get-all`);
+    const res = await axiosJWT.get(`/api/order/get-all`);
     return res;
 };
 
 export const deleteOrder = async (id) => {
-    const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/order/delete/${id}`);
+    const res = await axiosJWT.delete(`/api/order/delete/${id}`);
     return res;
 };
 
@@ -46,6 +46,7 @@ export const getMyOrdersWithToken = async (token) => {
             Authorization: `Bearer ${token}`
         }
     };
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/order/my-orders`, config);
+    const res = await axios.get(`/api/order/my-orders`, config);
     return res;
 };
+
