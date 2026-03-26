@@ -4,13 +4,12 @@ Dự án web thương mại điện tử xây dựng theo mô hình **MERN stack
 - **MongoDB**: lưu trữ dữ liệu người dùng, sản phẩm, đơn hàng.
 - **Express.js + Node.js**: cung cấp REST API cho nghiệp vụ.
 - **React.js**: giao diện người dùng (client).
-
-## Demo hình ảnh
+- 
 ## Demo giao diện
 
 ### Đăng ký / Đăng nhập
-![Uploading image.png…]()
-![Uploading image.png…]()
+<img width="711" height="341" alt="image" src="https://github.com/user-attachments/assets/87740b69-6530-4c3b-a3b9-9c537530a3e7" />
+
 
 
 ### Trang chủ
