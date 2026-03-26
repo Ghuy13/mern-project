@@ -6,16 +6,40 @@ Dự án web thương mại điện tử xây dựng theo mô hình **MERN stack
 - **React.js**: giao diện người dùng (client).
 
 ## Demo hình ảnh
+## Demo giao diện
 
-### Banner trang chủ
-![Demo banner](./client/src/assets/images/banner1.png)
-<img width="720" height="344" alt="image" src="https://github.com/user-attachments/assets/14a20ca5-7431-42de-a8b4-d2a91728025e" />
+### Đăng ký / Đăng nhập
+![Uploading image.png…]()
+![Uploading image.png…]()
 
 
+### Trang chủ
+![Uploading image.png…]()
 
 
-### Logo dự án
-![Demo logo](./client/src/assets/images/logo.png)
+### Thông tin người dùng
+![Profile](./demo/profile.png)
+
+### Tìm kiếm sản phẩm
+![Search](./demo/search.png)
+
+### Chi tiết sản phẩm
+![Product Detail](./demo/product-detail.png)
+
+### Giỏ hàng
+![Cart](./demo/cart.png)
+
+### Thanh toán
+![Checkout](./demo/checkout.png)
+
+### Đặt hàng thành công
+![Success](./demo/success.png)
+
+### Đơn hàng của bạn
+![My Orders](./demo/my-orders.png)
+
+### Admin - Quản lý
+![Admin](./demo/admin.png)
 
 ## 1) Cấu trúc thư mục
 
