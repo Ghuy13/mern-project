@@ -1,15 +1,26 @@
 {
-    "root": "client",
-    "cleanUrls": true,
-    "trailingSlash": false,
-    "routes": [
+    "version": 2,
+    "builds": [
         {
-            "src": "/[^.]+(?<!\\.html)/?$",
-            "destination": "/index.html"
+            "src": "client/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "build"
+            }
         },
         {
-            "src": "/.*",
-            "dest": "/index.html"
+            "src": "server/api/index.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "/server/api/index.js"
+        },
+        {
+            "source": "/((?!api|_next/static|_next/image|favicon.ico).*)",
+            "destination": "/client/build/$1"
         }
     ]
 }
